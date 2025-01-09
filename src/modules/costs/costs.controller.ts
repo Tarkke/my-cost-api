@@ -1,0 +1,59 @@
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common'
+import { CostsService } from './costs.service'
+import { CreateCostDto } from '@/modules/costs/dto/create-cost.dto'
+import { UpdateCostDto } from '@/modules/costs/dto/update-cost.dto'
+import { Page } from '@/decorators/page.decorator'
+
+@Controller('costs')
+export class CostsController {
+  constructor(private readonly costsService: CostsService) {}
+
+  @Get()
+  async getCosts(@Page() [page, pageSize]: [number, number]) {
+    const [list, totalItems] = await this.costsService.getCosts(page, pageSize)
+    const totalPages = Math.ceil(totalItems / pageSize)
+
+    return {
+      list,
+      pagination: {
+        currentPage: page,
+        pageSize,
+        totalItems,
+        totalPages,
+      },
+    }
+  }
+
+  @Post()
+  addCost(@Body() createCostDto: CreateCostDto) {
+    return this.costsService.addCost(createCostDto)
+  }
+
+  @Delete(':id')
+  async removeCost(@Param('id') id: string) {
+    const result = await this.costsService.removeCost(+id)
+    return result.affected > 0
+  }
+
+  @Patch(':id')
+  async updateCost(
+    @Param('id') id: string,
+    @Body() updateCostDto: UpdateCostDto,
+  ) {
+    const result = await this.costsService.updateCost(+id, updateCostDto)
+    return result.affected > 0
+  }
+
+  @Get(':id')
+  getCost(@Param('id') id: string) {
+    return this.costsService.getCost(+id)
+  }
+}
