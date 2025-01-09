@@ -18,11 +18,11 @@ export class CostsController {
 
   @Get()
   async getCosts(@Page() [page, pageSize]: [number, number]) {
-    const [list, totalItems] = await this.costsService.getCosts(page, pageSize)
+    const [items, totalItems] = await this.costsService.getCosts(page, pageSize)
     const totalPages = Math.ceil(totalItems / pageSize)
 
     return {
-      list,
+      items,
       pagination: {
         currentPage: page,
         pageSize,
@@ -39,8 +39,7 @@ export class CostsController {
 
   @Delete(':id')
   async removeCost(@Param('id') id: number) {
-    const result = await this.costsService.removeCost(id)
-    return result.affected > 0
+    await this.costsService.removeCost(id)
   }
 
   @Patch(':id')
@@ -48,8 +47,7 @@ export class CostsController {
     @Param('id') id: number,
     @Body() updateCostDto: UpdateCostDto,
   ) {
-    const result = await this.costsService.updateCost(id, updateCostDto)
-    return result.affected > 0
+    await this.costsService.updateCost(id, updateCostDto)
   }
 
   @Get(':id')

@@ -28,9 +28,9 @@ describe('CostsController', () => {
 
   describe('get costs list', () => {
     it('should return an object containing a list and pagination.', async () => {
-      const list = ['test']
+      const items = ['test']
       const result = {
-        list,
+        items,
         pagination: {
           currentPage: 1,
           pageSize: 10,
@@ -41,7 +41,7 @@ describe('CostsController', () => {
 
       jest
         .spyOn(service, 'getCosts')
-        .mockImplementation(async () => [list, 21] as any)
+        .mockImplementation(async () => [items, 21] as any)
       expect(await controller.getCosts([1, 10])).toStrictEqual(result)
     })
   })
