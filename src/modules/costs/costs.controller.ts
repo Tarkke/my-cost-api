@@ -38,22 +38,22 @@ export class CostsController {
   }
 
   @Delete(':id')
-  async removeCost(@Param('id') id: string) {
-    const result = await this.costsService.removeCost(+id)
+  async removeCost(@Param('id') id: number) {
+    const result = await this.costsService.removeCost(id)
     return result.affected > 0
   }
 
   @Patch(':id')
   async updateCost(
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateCostDto: UpdateCostDto,
   ) {
-    const result = await this.costsService.updateCost(+id, updateCostDto)
+    const result = await this.costsService.updateCost(id, updateCostDto)
     return result.affected > 0
   }
 
   @Get(':id')
-  getCost(@Param('id') id: string) {
-    return this.costsService.getCost(+id)
+  getCost(@Param('id') id: number) {
+    return this.costsService.getCost(id)
   }
 }
